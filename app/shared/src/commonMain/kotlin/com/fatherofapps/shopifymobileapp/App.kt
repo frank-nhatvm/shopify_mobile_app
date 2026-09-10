@@ -3,7 +3,9 @@ package com.fatherofapps.shopifymobileapp
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +23,7 @@ import androidx.compose.ui.tooling.preview.AndroidUiMode
 import androidx.compose.ui.tooling.preview.AndroidUiModes
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fatherofapps.shopifymobileapp.ui.components.ShopifyButton
 import com.fatherofapps.shopifymobileapp.ui.theme.AppNotoSanFont
 import com.fatherofapps.shopifymobileapp.ui.theme.ShopifyAppTheme
 import org.jetbrains.compose.resources.Font
@@ -35,7 +38,12 @@ import shopifymobileapp.app.shared.generated.resources.welcome_page_title
 
 @Composable
 @Preview(name = "English", locale = "en", showBackground = true)
-@Preview(name = "Vietnamese", locale = "vi", showBackground = true, uiMode = AndroidUiModes.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Vietnamese",
+    locale = "vi",
+    showBackground = true,
+    uiMode = AndroidUiModes.UI_MODE_NIGHT_YES
+)
 fun App() {
     ShopifyAppTheme {
 
@@ -83,13 +91,32 @@ fun App() {
                     color = ShopifyAppTheme.colors.textDefaultPrimary
                 ),
 
-            )
+                )
             Text(
                 stringResource(Res.string.welcome_page_title),
                 style = ShopifyAppTheme.typography.caption.copy(
                     color = ShopifyAppTheme.colors.textDefaultPrimary
                 ),
             )
+
+            Row(modifier = Modifier.fillMaxWidth(),
+horizontalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+
+                ShopifyButton.Secondary(
+                    label = "Register",
+                    onClick = {},
+                    modifier = Modifier.weight(1f)
+                )
+                ShopifyButton.Primary(
+                    label = "Sign In",
+                    onClick = {
+
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
 
         }
     }
