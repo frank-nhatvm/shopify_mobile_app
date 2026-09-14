@@ -23,6 +23,16 @@ import androidx.compose.ui.tooling.preview.AndroidUiMode
 import androidx.compose.ui.tooling.preview.AndroidUiModes
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import com.fatherofapps.shopifymobileapp.routing.DebugRoute
+import com.fatherofapps.shopifymobileapp.routing.HomeRoute
+import com.fatherofapps.shopifymobileapp.routing.WelcomeRoute
+import com.fatherofapps.shopifymobileapp.routing.shopifyRouteConfig
+import com.fatherofapps.shopifymobileapp.screens.debug.DebugScreen
+import com.fatherofapps.shopifymobileapp.screens.home.HomeScreen
+import com.fatherofapps.shopifymobileapp.screens.welcome.WelcomeScreen
 import com.fatherofapps.shopifymobileapp.ui.components.ShopifyButton
 import com.fatherofapps.shopifymobileapp.ui.theme.AppNotoSanFont
 import com.fatherofapps.shopifymobileapp.ui.theme.ShopifyAppTheme
@@ -45,79 +55,36 @@ import shopifymobileapp.app.shared.generated.resources.welcome_page_title
     uiMode = AndroidUiModes.UI_MODE_NIGHT_YES
 )
 fun App() {
+
+    val backStack = rememberNavBackStack(shopifyRouteConfig, WelcomeRoute)
     ShopifyAppTheme {
 
-        Column(
-            modifier = Modifier
-                .background(ShopifyAppTheme.colors.backgroundDefault)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+        NavDisplay(
+            backStack = backStack,
+            entryProvider = {
+                key ->
+                when(key) {
+                    is WelcomeRoute -> NavEntry(key){
+                        WelcomeScreen {
+                            // backStack.clear()
+                            backStack.add(HomeRoute)
+                        }
+                    }
 
-            Text(
-                stringResource(Res.string.welcome_page_title),
-                style = ShopifyAppTheme.typography.h1.copy(
-                    color = ShopifyAppTheme.colors.textDefaultPrimary
-                ),
-                modifier = Modifier.background(
-                    color = ShopifyAppTheme.colors.textDanger,
-                    shape = ShopifyAppTheme.shapes.small
-                ).padding(12.dp)
-            )
+                    is HomeRoute -> NavEntry(key){
+                        HomeScreen()
+                    }
 
-            Text(
-                stringResource(Res.string.welcome_page_title),
-                style = ShopifyAppTheme.typography.h2,
-            )
+                    is DebugRoute -> NavEntry(key){
+                        DebugScreen()
+                    }
 
-            Text(
-                stringResource(Res.string.welcome_page_title),
-                style = ShopifyAppTheme.typography.h3.copy(
-                    color = ShopifyAppTheme.colors.textDefaultPrimary
-                ),
-            )
-
-            Text(
-                stringResource(Res.string.welcome_page_title),
-                style = ShopifyAppTheme.typography.h4.copy(
-                    color = ShopifyAppTheme.colors.textDefaultPrimary
-                ),
-            )
-
-            Text(
-                stringResource(Res.string.welcome_page_title),
-                style = ShopifyAppTheme.typography.body.copy(
-                    color = ShopifyAppTheme.colors.textDefaultPrimary
-                ),
-
-                )
-            Text(
-                stringResource(Res.string.welcome_page_title),
-                style = ShopifyAppTheme.typography.caption.copy(
-                    color = ShopifyAppTheme.colors.textDefaultPrimary
-                ),
-            )
-
-            Row(modifier = Modifier.fillMaxWidth(),
-horizontalArrangement = Arrangement.spacedBy(24.dp)
-                ) {
-
-                ShopifyButton.Secondary(
-                    label = "Register",
-                    onClick = {},
-                    modifier = Modifier.weight(1f)
-                )
-                ShopifyButton.Primary(
-                    label = "Sign In",
-                    onClick = {
-
-                    },
-                    modifier = Modifier.weight(1f)
-                )
+                    else -> NavEntry(key){
+                        Text("Unknown Route")
+                    }
+                }
             }
+        )
 
-
-        }
     }
 }
