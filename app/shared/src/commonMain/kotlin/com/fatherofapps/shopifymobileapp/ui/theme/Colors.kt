@@ -59,6 +59,8 @@ data class ShopifyAppColors(
 
     val borderDefault: Color,
     val borderDanger: Color,
+    val iconDefault: Color,
+    val iconHighlight: Color,
 )
 
 val lightColors = ShopifyAppColors(
@@ -86,6 +88,8 @@ val lightColors = ShopifyAppColors(
 
     borderDefault = secondaryIron,
     borderDanger = systemRed,
+    iconDefault = matteBlack,
+    iconHighlight = primaryPink,
 )
 
 val darkColors = ShopifyAppColors(
@@ -113,4 +117,6 @@ val darkColors = ShopifyAppColors(
 
     borderDefault = Color(0xFF6B6B6B),
     borderDanger = Color(0xFFFF7B7B),
+    iconDefault = Color(0xFFF5F5F5),
+    iconHighlight = primaryPink
 )

@@ -17,12 +17,23 @@ val shopifyRouteConfig = SavedStateConfiguration{
 }
 
 @Serializable
+sealed interface  TopLevelRoute: ShopifyRoute
+@Serializable
+data object WishlistRoute: TopLevelRoute, ShopifyRoute
+@Serializable
+data object ShopRoute: TopLevelRoute, ShopifyRoute
+@Serializable
+data object SearchRoute: TopLevelRoute, ShopifyRoute
+@Serializable
+data object AccountRoute: TopLevelRoute, ShopifyRoute
+
+@Serializable
 sealed interface ShopifyRoute: NavKey
 
 @Serializable
 data object WelcomeRoute: ShopifyRoute
 @Serializable
-data object HomeRoute: ShopifyRoute
+data object HomeRoute: TopLevelRoute,ShopifyRoute
 
 @Serializable
 data object DebugRoute: ShopifyRoute

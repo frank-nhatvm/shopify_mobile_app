@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,13 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.fatherofapps.shopifymobileapp.routing.AccountRoute
 import com.fatherofapps.shopifymobileapp.routing.DebugRoute
 import com.fatherofapps.shopifymobileapp.routing.HomeRoute
+import com.fatherofapps.shopifymobileapp.routing.ShopRoute
 import com.fatherofapps.shopifymobileapp.routing.WelcomeRoute
+import com.fatherofapps.shopifymobileapp.routing.WishlistRoute
 import com.fatherofapps.shopifymobileapp.routing.shopifyRouteConfig
 import com.fatherofapps.shopifymobileapp.screens.debug.DebugScreen
 import com.fatherofapps.shopifymobileapp.screens.home.HomeScreen
 import com.fatherofapps.shopifymobileapp.screens.welcome.WelcomeScreen
+import com.fatherofapps.shopifymobileapp.ui.components.MainNavDestination
+import com.fatherofapps.shopifymobileapp.ui.components.ShopifyBottomNavigationBar
 import com.fatherofapps.shopifymobileapp.ui.components.ShopifyButton
 import com.fatherofapps.shopifymobileapp.ui.theme.AppNotoSanFont
 import com.fatherofapps.shopifymobileapp.ui.theme.ShopifyAppTheme
@@ -41,10 +47,47 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 import shopifymobileapp.app.shared.generated.resources.Res
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_account_title
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_home_title
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_account
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_home
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_shop
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_wishlist
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_shop_title
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_wishlist_title
 import shopifymobileapp.app.shared.generated.resources.compose_multiplatform
 import shopifymobileapp.app.shared.generated.resources.notosans_condensed_bold
 import shopifymobileapp.app.shared.generated.resources.notosans_condensed_semibold
 import shopifymobileapp.app.shared.generated.resources.welcome_page_title
+
+
+val bottomNavDestinations = listOf(
+    MainNavDestination(
+        label = Res.string.bottom_navigation_home_title,
+        icon = Res.drawable.bottom_navigation_ic_home,
+        route = HomeRoute
+    ),
+    MainNavDestination(
+        label = Res.string.bottom_navigation_wishlist_title,
+        icon = Res.drawable.bottom_navigation_ic_wishlist,
+        route = WishlistRoute
+    ),
+    MainNavDestination(
+        label = Res.string.bottom_navigation_shop_title,
+        icon = Res.drawable.bottom_navigation_ic_shop,
+        route = ShopRoute
+    ),
+    MainNavDestination(
+        label = Res.string.bottom_navigation_shop_title,
+        icon = Res.drawable.bottom_navigation_ic_shop,
+        route = ShopRoute
+    ),
+    MainNavDestination(
+        label = Res.string.bottom_navigation_account_title,
+        icon = Res.drawable.bottom_navigation_ic_account,
+        route = AccountRoute
+    ),
+)
 
 @Composable
 @Preview(name = "English", locale = "en", showBackground = true)
@@ -57,34 +100,53 @@ import shopifymobileapp.app.shared.generated.resources.welcome_page_title
 fun App() {
 
     val backStack = rememberNavBackStack(shopifyRouteConfig, WelcomeRoute)
-    ShopifyAppTheme {
 
-        NavDisplay(
-            backStack = backStack,
-            entryProvider = {
-                key ->
-                when(key) {
-                    is WelcomeRoute -> NavEntry(key){
-                        WelcomeScreen {
-                            // backStack.clear()
-                            backStack.add(HomeRoute)
+    val currentDestination by remember(backStack) {
+        derivedStateOf {
+            backStack.lastOrNull() as? ShopRoute
+        }
+    }
+
+    ShopifyAppTheme {
+        Column {
+
+            Box(modifier = Modifier.weight(1f)) {
+                NavDisplay(
+                    backStack = backStack,
+                    entryProvider = { key ->
+                        when (key) {
+                            is WelcomeRoute -> NavEntry(key) {
+                                WelcomeScreen {
+                                    // backStack.clear()
+                                    backStack.add(HomeRoute)
+                                }
+                            }
+
+                            is HomeRoute -> NavEntry(key) {
+                                HomeScreen()
+                            }
+
+                            is DebugRoute -> NavEntry(key) {
+                                DebugScreen()
+                            }
+
+                            else -> NavEntry(key) {
+                                Text("Unknown Route")
+                            }
                         }
                     }
-
-                    is HomeRoute -> NavEntry(key){
-                        HomeScreen()
-                    }
-
-                    is DebugRoute -> NavEntry(key){
-                        DebugScreen()
-                    }
-
-                    else -> NavEntry(key){
-                        Text("Unknown Route")
-                    }
-                }
+                )
             }
-        )
 
+            ShopifyBottomNavigationBar(
+                currentDestination = currentDestination,
+                destinations = bottomNavDestinations,
+                onClick = {
+
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+        }
     }
 }
