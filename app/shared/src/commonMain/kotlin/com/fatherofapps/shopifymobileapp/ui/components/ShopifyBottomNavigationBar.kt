@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.AndroidUiModes
@@ -45,6 +46,9 @@ fun ShopifyBottomNavigationBar(
     onClick: (TopLevelRoute) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    SideEffect {
+        println("ShopifyBottomNavigationBar ${currentDestination}")
+    }
     Row(
         modifier = modifier.fillMaxWidth().background(
             color = ShopifyAppTheme.colors.backgroundDefault

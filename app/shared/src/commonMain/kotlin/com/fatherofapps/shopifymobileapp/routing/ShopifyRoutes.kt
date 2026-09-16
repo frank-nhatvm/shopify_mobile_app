@@ -37,3 +37,5 @@ data object HomeRoute: TopLevelRoute,ShopifyRoute
 
 @Serializable
 data object DebugRoute: ShopifyRoute
+@Serializable
+data object ProductDetailRoute : ShopifyRoute

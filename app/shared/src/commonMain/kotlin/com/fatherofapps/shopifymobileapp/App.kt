@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,13 +33,22 @@ import androidx.navigation3.ui.NavDisplay
 import com.fatherofapps.shopifymobileapp.routing.AccountRoute
 import com.fatherofapps.shopifymobileapp.routing.DebugRoute
 import com.fatherofapps.shopifymobileapp.routing.HomeRoute
+import com.fatherofapps.shopifymobileapp.routing.ProductDetailRoute
+import com.fatherofapps.shopifymobileapp.routing.SearchRoute
 import com.fatherofapps.shopifymobileapp.routing.ShopRoute
+import com.fatherofapps.shopifymobileapp.routing.ShopifyRoute
+import com.fatherofapps.shopifymobileapp.routing.TopLevelRoute
 import com.fatherofapps.shopifymobileapp.routing.WelcomeRoute
 import com.fatherofapps.shopifymobileapp.routing.WishlistRoute
 import com.fatherofapps.shopifymobileapp.routing.shopifyRouteConfig
+import com.fatherofapps.shopifymobileapp.screens.account.AccountScreen
 import com.fatherofapps.shopifymobileapp.screens.debug.DebugScreen
 import com.fatherofapps.shopifymobileapp.screens.home.HomeScreen
+import com.fatherofapps.shopifymobileapp.screens.products.ProductDetailScreen
+import com.fatherofapps.shopifymobileapp.screens.search.SearchScreen
+import com.fatherofapps.shopifymobileapp.screens.shop.ShopScreen
 import com.fatherofapps.shopifymobileapp.screens.welcome.WelcomeScreen
+import com.fatherofapps.shopifymobileapp.screens.wishlist.WishlistScreen
 import com.fatherofapps.shopifymobileapp.ui.components.MainNavDestination
 import com.fatherofapps.shopifymobileapp.ui.components.ShopifyBottomNavigationBar
 import com.fatherofapps.shopifymobileapp.ui.components.ShopifyButton
@@ -51,8 +63,10 @@ import shopifymobileapp.app.shared.generated.resources.bottom_navigation_account
 import shopifymobileapp.app.shared.generated.resources.bottom_navigation_home_title
 import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_account
 import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_home
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_search
 import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_shop
 import shopifymobileapp.app.shared.generated.resources.bottom_navigation_ic_wishlist
+import shopifymobileapp.app.shared.generated.resources.bottom_navigation_search_title
 import shopifymobileapp.app.shared.generated.resources.bottom_navigation_shop_title
 import shopifymobileapp.app.shared.generated.resources.bottom_navigation_wishlist_title
 import shopifymobileapp.app.shared.generated.resources.compose_multiplatform
@@ -78,9 +92,9 @@ val bottomNavDestinations = listOf(
         route = ShopRoute
     ),
     MainNavDestination(
-        label = Res.string.bottom_navigation_shop_title,
-        icon = Res.drawable.bottom_navigation_ic_shop,
-        route = ShopRoute
+        label = Res.string.bottom_navigation_search_title,
+        icon = Res.drawable.bottom_navigation_ic_search,
+        route = SearchRoute
     ),
     MainNavDestination(
         label = Res.string.bottom_navigation_account_title,
@@ -103,12 +117,22 @@ fun App() {
 
     val currentDestination by remember(backStack) {
         derivedStateOf {
-            backStack.lastOrNull() as? ShopRoute
+            backStack.lastOrNull() as? ShopifyRoute
+        }
+    }
+
+    val showBottomNavigationBar by remember(currentDestination) {
+        derivedStateOf {
+            currentDestination is TopLevelRoute
         }
     }
 
     ShopifyAppTheme {
-        Column {
+        Column(
+            modifier = Modifier.fillMaxSize().background(
+                ShopifyAppTheme.colors.backgroundDefault
+            ).windowInsetsPadding(WindowInsets.systemBars)
+        ) {
 
             Box(modifier = Modifier.weight(1f)) {
                 NavDisplay(
@@ -123,30 +147,56 @@ fun App() {
                             }
 
                             is HomeRoute -> NavEntry(key) {
-                                HomeScreen()
+                                HomeScreen {
+                                    backStack.add(ProductDetailRoute)
+                                }
                             }
 
                             is DebugRoute -> NavEntry(key) {
                                 DebugScreen()
                             }
 
+                            is WishlistRoute -> NavEntry(key) {
+                                WishlistScreen()
+                            }
+
+                            is ShopRoute -> NavEntry(key) {
+                                ShopScreen()
+                            }
+
+                            is AccountRoute -> NavEntry(key) {
+                                AccountScreen()
+                            }
+
+                            is SearchRoute -> NavEntry(key) {
+                                SearchScreen()
+                            }
+
+                            is ProductDetailRoute -> NavEntry(key) {
+                                ProductDetailScreen()
+                            }
+
                             else -> NavEntry(key) {
                                 Text("Unknown Route")
                             }
+
+
                         }
                     }
                 )
             }
+            if (showBottomNavigationBar) {
+                ShopifyBottomNavigationBar(
+                    currentDestination = currentDestination,
+                    destinations = bottomNavDestinations,
+                    onClick = { route ->
+                        println("App navigate to $route")
+                        backStack.add(route)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            ShopifyBottomNavigationBar(
-                currentDestination = currentDestination,
-                destinations = bottomNavDestinations,
-                onClick = {
-
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
+            }
         }
     }
 }
