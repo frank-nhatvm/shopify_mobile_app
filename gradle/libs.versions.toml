@@ -17,6 +17,7 @@ logback = "1.6.3"
 material3 = "1.11.0-alpha07"
 multiplatform-nav3-ui = "1.1.1"
 kotlinx-serialization-json = "1.11.0"
+apollo = "5.1.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -43,6 +44,11 @@ ktor-serverTestHost = { module = "io.ktor:ktor-server-test-host-jvm", version.re
 
 jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "multiplatform-nav3-ui" }
 jetbrains-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+
+
+
+apollo-runtime = {module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo"}
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
@@ -52,3 +58,4 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+apollo = {id = "com.apollographql.apollo", version.ref = "apollo"}

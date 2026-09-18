@@ -1,0 +1,14 @@
+query LaunchList($pageSize: Int) {
+    launches(pageSize: $pageSize) {
+        launches {
+            id
+            mission {
+                name
+            }
+            rocket {
+                name
+            }
+            isBooked
+        }
+    }
+}

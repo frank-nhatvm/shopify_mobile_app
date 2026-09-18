@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.api.Optional
 import com.fatherofapps.shopifymobileapp.routing.AccountRoute
 import com.fatherofapps.shopifymobileapp.routing.DebugRoute
 import com.fatherofapps.shopifymobileapp.routing.HomeRoute
@@ -112,6 +114,12 @@ val bottomNavDestinations = listOf(
     uiMode = AndroidUiModes.UI_MODE_NIGHT_YES
 )
 fun App() {
+
+    LaunchedEffect(Unit) {
+        val apolloClient = ApolloClient.Builder().serverUrl("https://apollo-fullstack-tutorial.herokuapp.com/graphql").build()
+        val response = apolloClient.query(LaunchListQuery(pageSize = Optional.present(1))).execute().data?.launches?.launches?.firstOrNull()
+        println(response)
+    }
 
     val backStack = rememberNavBackStack(shopifyRouteConfig, WelcomeRoute)
 

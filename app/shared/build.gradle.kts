@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.apollo)
 }
 
 kotlin {
@@ -57,6 +58,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.jetbrains.serialization.json)
+            implementation(libs.apollo.runtime)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -66,4 +68,14 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
+}
+
+apollo {
+    service("service"){
+        packageName.set("com.fatherofapps.shopifymobileapp")
+        introspection {
+            endpointUrl.set("https://apollo-fullstack-tutorial.herokuapp.com/graphql")
+            schemaFile.set(file("src/commonMain/graphql/schema.graphqls"))
+        }
+    }
 }
