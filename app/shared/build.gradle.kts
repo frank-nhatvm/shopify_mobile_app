@@ -74,8 +74,9 @@ apollo {
     service("service"){
         packageName.set("com.fatherofapps.shopifymobileapp")
         introspection {
-            endpointUrl.set("https://apollo-fullstack-tutorial.herokuapp.com/graphql")
+            endpointUrl.set("https://fatherofapps-aosqlsdg.myshopify.com/api/2026-07/graphql.json")
             schemaFile.set(file("src/commonMain/graphql/schema.graphqls"))
+            headers.put("X-Shopify-Storefront-Access-Token" , "f9623aea36baee117299b2e8e59e733c")
         }
     }
 }

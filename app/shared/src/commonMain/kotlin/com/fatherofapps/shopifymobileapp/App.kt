@@ -116,8 +116,11 @@ val bottomNavDestinations = listOf(
 fun App() {
 
     LaunchedEffect(Unit) {
-        val apolloClient = ApolloClient.Builder().serverUrl("https://apollo-fullstack-tutorial.herokuapp.com/graphql").build()
-        val response = apolloClient.query(LaunchListQuery(pageSize = Optional.present(1))).execute().data?.launches?.launches?.firstOrNull()
+        val apolloClient = ApolloClient.Builder().serverUrl("https://fatherofapps-aosqlsdg.myshopify.com/api/2026-07/graphql.json")
+            .addHttpHeader("X-Shopify-Storefront-Access-Token", "f9623aea36baee117299b2e8e59e733c")
+            .build()
+
+        val response = apolloClient.query(CollectionsQuery()).execute().data?.collections?.nodes
         println(response)
     }
 

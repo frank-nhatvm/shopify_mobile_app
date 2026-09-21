@@ -1,0 +1,8 @@
+query Collections {
+    collections(first: 10) {
+        nodes {
+            id
+            title
+        }
+    }
+}
