@@ -1,0 +1,53 @@
+query HomePageData(
+    $newArrivalsCount: Int = 8
+    $bestSellersCount: Int = 8
+    $collectionsCount: Int = 20
+) {
+    # 1. New Arrivals
+    newArrivals: products(first: $newArrivalsCount, sortKey: CREATED_AT, reverse: true) {
+        nodes {
+            id
+            title
+            handle
+            createdAt
+            featuredImage {
+                url
+                altText
+            }
+            priceRange {
+                minVariantPrice {
+                    amount
+                    currencyCode
+                }
+            }
+        }
+    }
+
+    # 2. Best Sellers
+    bestSellers: products(first: $bestSellersCount, sortKey: BEST_SELLING) {
+        nodes {
+            id
+            title
+            handle
+            featuredImage {
+                url
+                altText
+            }
+            priceRange {
+                minVariantPrice {
+                    amount
+                    currencyCode
+                }
+            }
+        }
+    }
+
+    # 3. Collections / Categories
+    collections(first: $collectionsCount) {
+        nodes {
+            id
+            title
+            handle
+        }
+    }
+}
